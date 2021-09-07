@@ -3,7 +3,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const weatherData = require('./assets/weather.json');
+const weather  = require('./assets/weather.json');
 
 const server = express();
 server.use(cors());
@@ -12,36 +12,38 @@ const PORT = process.env.PORT;
 
 
 
-let weatherArr=[];
-
-// http://localhost:3010/weather
-server.get('/weather', (req, res) => {
-    const name = req.query.name;
+// http://localhost:3010/weather?searchQuery=Amman&lat=''&lon=''
+server.get('/weather',(req,res)=>{
+    const name = req.query.searchQuery;
+    const lat = req.query.lat;
     const lon = req.query.lon;
-    const result = weatherData.find((item) => {
-
-        if (item.city_name === name)
-        weatherArr =item.data.map(day =>{
-const dayObj= new Forecast(day);
-return dayObj;
-
-       })
-        return item;
+    try{
+        const result = weather.find( (item) =>{
+            if(item.city_name === name && item.lat === lat && item.lon === lon){
+              return item;
+            }        
+        
     })
 
-    res.send(weatherArr);
+    let data = result.data.map(item=>{
+    
+   
+        return new Forcast(item);
+    })
+
+    res.send(data);
+  }
+  catch{
+    res.send('404 Not Found');
+  }
 })
-class Forecast {
-    constructor(item) {
-        this.date = day.valid_date;
-        this.description = `Low of ${day.low_temp}, high of ${day.high_temp}with ${day.weather.valid_date}`
-        
-    }
+
+class Forcast {
+  constructor(item){
+    this.date = item.valid_date;
+    this. description= `Low of ${item.low_temp}, high of ${item.max_temp} with broken clouds${item.weather.description}` ;
+  }
 }
-// http:localhost:3010/***** */
-server.get('*', (req, res) => {
-    res.status(404).send('Sorry, page not found');
-})
 
 // to make our server listen on PORT
 server.listen(PORT, () => {
