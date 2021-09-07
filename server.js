@@ -16,11 +16,11 @@ let weatherArr=[];
 
 // http://localhost:3010/weather
 server.get('/weather', (req, res) => {
-    const lat = req.query.lat;
+    const name = req.query.name;
     const lon = req.query.lon;
     const result = weatherData.find((item) => {
 
-        if (item.lat === lat && item.lon === lon)
+        if (item.city_name === name)
         weatherArr =item.data.map(day =>{
 const dayObj= new Forecast(day);
 return dayObj;
