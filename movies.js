@@ -36,13 +36,14 @@ function moduleMovie(req,res){
     }
 
 
-    function movie(day) {
-      (this.title = day.original_title),
-        (this.overview = day.overview),
-        (this.average_votes = day.vote_average),
-        (this.total_votes = day.vote_count),
-        (this.popularity = day.popularity),
-        (this.released_on = day.release_date);
+    function movie(item) {
+      (this.title = item.original_title),
+      (this.image_url = `https://image.tmdb.org/t/p/w500${item.backdrop_path}`),
+      (this.overview = item.overview),
+        (this.average_votes = item.vote_average),
+        (this.total_votes = item.vote_count),
+        (this.popularity = item.popularity),
+        (this.released_on = item.release_date);
     }
 
     module.exports=moduleMovie;
